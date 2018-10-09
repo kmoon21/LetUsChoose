@@ -1,5 +1,5 @@
 const yelp = require('yelp-fusion')
-const key = require('../key')
+const key = require('./key')
 const client = yelp.client(key)
 const { GraphQLClient } = require('graphql-request');
 // const searchRequest = {
