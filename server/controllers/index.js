@@ -25,7 +25,6 @@ const findRestaurants = async (req, res) => {
             }
             display_phone
             location{
-                address1
               formatted_address
             }
         }
