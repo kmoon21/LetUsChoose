@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 // import axios from 'axios'
 // import RenderOption from './renderoption'
-// import { Query } from 'react-apollo';
+import { Query } from 'react-apollo';
 import gql from 'graphql-tag'
 import client from '../../index'
 
