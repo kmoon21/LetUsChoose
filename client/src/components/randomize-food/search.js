@@ -3,48 +3,63 @@ import axios from 'axios'
 import RenderOption from './renderoption'
 
 class Search extends Component {
-    state = { 
-        name: '',
-        data: '',
-        food: '',
-        budget: '',
-        location: ''
-     }
+    state = {
+        alias: '',
+        location: '',
+        data: ''
+    }
 
-     getData = () => {
-         axios.get('',)
-         .then(response => {
-             console.log(response.data)
-         })
-     }
+    requestData = async e => {
+        e.preventDefault();
+        try {
+            const receiveRestaurant = await axios.get(`http://localhost:4000/request/${this.state.alias}/${this.state.location}`, { crossdomain: true })
+            console.log("Received Resturant: ", receiveRestaurant);
+            this.setState({
+                data: receiveRestaurant.data
+            });
+        } catch (e) {
+            console.log("Received receiveRestaurant error: ", e)
+        }
+    }
 
     handleOnChange = e => {
         this.setState({
-        [e.target.name]: e.target.value
+            [e.target.name]: e.target.value.toLowerCase()
         })
-    }     
-
-
-    render() { 
-        return ( 
+    }
+    render() {
+        let data = this.state.data;
+        return (
             <section className="section is-medium">
-                <div className="columns">
+                <div className="columns container">
                     <div className="column is-4">
-                        <form className="form">
+                        <form className="form" onSubmit={this.requestData}>
                             <label>What type of food are you craving?</label>
-                            <input className="input" value={this.state.value} onChange={this.handleOnChange} name="food"></input>
-                            <label>What's your budget?</label>
-                            <input className="input" value={this.state.value} onChange={this.handleOnChange} name="budget"></input>
+                            <input className="input" value={this.state.value} onChange={this.handleOnChange} name="alias" placeholder="Japanese, Mexican, etc."></input>
                             <label>Where are you located?</label>
-                            <input className="input" value={this.state.value} onChange={this.handleOnChange} name="location"></input>
-                            <a className="button" onClick={this.getData}>Find me something!</a>
-                        </form> 
+                            <input className="input" value={this.state.value} onChange={this.handleOnChange} name="location" placeholder="Zipcode OR city"></input>
+                            <br /><br />
+                            <input type="submit" value="Find me something!" className="button"></input>
+                        </form>
+                        </div>
+                        <div className="column is-2"></div>
+                        <div className="column is-6">
+                            {
+                                data === '' 
+                                ? ''
+                                : <RenderOption 
+                                    name={data.name}
+                                    photo={data.photos}
+                                    phone={data.display_phone}
+                                    address={data.location.formatted_address}
+                                    link={data.url}
+                                />
+                            }
+                        </div>
                     </div>
-                </div>
-            
             </section>
-         );
+        );
     }
 }
- 
+
 export default Search;
